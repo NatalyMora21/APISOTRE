@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"apiStore/db"
 	"apiStore/info"
 	sc "apiStore/schema"
 	"context"
@@ -13,10 +12,9 @@ import (
 
 func Mutationproducts() {
 
-	dgraphClient := db.ConnectionDgraph()
 	ctx := context.Background()
 
-	//Data Products
+	//Data Productsg
 
 	products := info.ReadProductsCsv()
 	println(products)
@@ -30,7 +28,7 @@ func Mutationproducts() {
 	}
 
 	mu.SetJson = pb
-	response, err := dgraphClient.NewTxn().Mutate(ctx, mu)
+	response, err := C.NewTxn().Mutate(ctx, mu)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -41,7 +39,6 @@ func Mutationproducts() {
 
 func MutationInfoBuyers(info []sc.InfoBuyer) {
 
-	dgraphClient := db.ConnectionDgraph()
 	ctx := context.Background()
 
 	//Data Products
@@ -55,7 +52,7 @@ func MutationInfoBuyers(info []sc.InfoBuyer) {
 	}
 
 	mu.SetJson = pb
-	response, err := dgraphClient.NewTxn().Mutate(ctx, mu)
+	response, err := C.NewTxn().Mutate(ctx, mu)
 	if err != nil {
 		log.Fatal(err)
 	}
