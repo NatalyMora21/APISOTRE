@@ -1,25 +1,24 @@
 package controllers
 
 import (
-	"apiStore/db"
 	sc "apiStore/schema"
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 )
 
 func Getproducts() []sc.Product {
 
-	dgraphClient := db.ConnectionDgraph()
-	txn := dgraphClient.NewTxn()
+	txn := C.NewTxn()
 
 	const q = `
 	{
-		products(func:has(Name)){
+		products(func:has(name)){
 		uid
-		Id
-		Name
-		Price
+		id
+		name
+		price
 	  }
 	}
 	`
@@ -41,7 +40,88 @@ func Getproducts() []sc.Product {
 
 	return r.Products
 
-	/*out, _ := json.MarshalIndent(r, "", "\t")
-	fmt.Printf("%s\n", out)*/
+}
+
+//Query all Buyers
+
+func AllBuyers() {
+
+	txn := C.NewTxn()
+
+	const querybuyers = `
+	{
+		buyers(func: type(Buyer)) {
+		   name
+			 age
+	 
+	   }
+	 }
+	`
+
+	type AllBuyers struct {
+		Buyers []sc.Buyer `json:"buyers"`
+	}
+
+	var listBuyers AllBuyers
+
+	resp, err := txn.Query(context.Background(), querybuyers)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = json.Unmarshal(resp.Json, &listBuyers)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(listBuyers.Buyers)
+	//return r.Products
+
+}
+
+func BuyerId() {
+
+	txn := C.NewTxn()
+
+	const querybuyers = `
+	{
+		buyer(func:uid(0xd7)) {
+			uid
+		  	name
+			age
+			transactions{
+			 	ip
+			 	device
+			 	products{
+					name
+			    	price
+			 }
+		   }
+	   }
+	 }
+	`
+
+	type BuyerId struct {
+		Buyer []sc.InfoBuyerj `json:"buyer"`
+	}
+
+	var buyer BuyerId
+
+	resp, err := txn.Query(context.Background(), querybuyers)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = json.Unmarshal(resp.Json, &buyer)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(buyer.Buyer[0].Transactions)
+	//return r.Products
+	out, _ := json.MarshalIndent(buyer, "", "\t")
+	fmt.Printf("%s\n", out)
+
+	//Compradores con la misma ip
 
 }
