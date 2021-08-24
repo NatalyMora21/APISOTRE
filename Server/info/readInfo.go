@@ -61,8 +61,9 @@ func ReadProductsCsv() []sc.Product {
 
 		//Mirar vacio
 		productNew := sc.Product{
-			Id:   record[0],
-			Name: record[1],
+			Id:    record[0],
+			Name:  record[1],
+			DType: []string{"Product"},
 		}
 		if record[2] != "" {
 			price, err := strconv.Atoi(record[2])
@@ -88,17 +89,17 @@ func ReadInfoTxt() []sc.Transaction {
 
 		{
 			Id:       "#0000611ef080",
-			Buyer_id: "3477bec0",
+			Buyer_id: "62efa0df",
 			Ip:       "126.238.179.254",
 			Device:   "android",
-			Products: []string{"624839e3", "50acc43"},
+			Products: []string{"33f009db", "815c8e5f"},
 		},
 		{
 			Id:       "#0000611ef081",
-			Buyer_id: "e1b2a1f2",
+			Buyer_id: "a95841b4",
 			Ip:       "119.204.182.131",
 			Device:   "ios",
-			Products: []string{"624839e3", "50acc43", "41cabd38", "4eb69717"},
+			Products: []string{"33f009db", "815c8e5f", "ca23a9ba", "88f9107b"},
 		},
 	}
 
