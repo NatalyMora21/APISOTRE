@@ -26,18 +26,18 @@ type TransactionProduct struct {
 	Buyer_id string      `json:"buyer_id"`
 	Ip       string      `json:"ip"`
 	Device   string      `json:"device"`
-	Products []idProduct `json:"products"`
+	Products []IdProduct `json:"products"`
 }
 
-type idProduct struct {
+type IdProduct struct {
 	Uid string `json:"uid"`
 }
 
 //Info para crear los nods en Dgraph
 //La info de los productos sería el id que se trae al crearlos en la Bd
 type InfoBuyer struct {
-	Id           string        `json:"id"`
-	Name         string        `json:"name"`
-	Age          int           `json:"age"`
-	Transactions []Transaction `json:"transactions"`
+	Id           string               `json:"id"`
+	Name         string               `json:"name"`
+	Age          int                  `json:"age"`
+	Transactions []TransactionProduct `json:"transactions"`
 }
