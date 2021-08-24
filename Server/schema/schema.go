@@ -1,33 +1,28 @@
 package schema
 
 import (
-	"apiStore/db"
 	"context"
+	"fmt"
 	"log"
 
+	"github.com/dgraph-io/dgo/v210"
 	"github.com/dgraph-io/dgo/v210/protos/api"
 )
 
-func CreateSchema() {
+func CreateSchema(c *dgo.Dgraph) {
+	fmt.Println("Create schema")
 
 	op := &api.Operation{}
 	op.Schema = `
-		name: string .
+		name: string @index(exact) .
+		id: string .
+		price: int .
 		age: int .
-		id: string.
-		price: int.
-		buyer_id: string.
-		ip:string.
+		buyer_id: string .
+		ip: string .
 		device: string .
-		transactions: [uid].
+		transactions: [uid] .
 		products: [uid] .
-		type Buyer {
-			id: string
-			name: string
-			age: int
-			transactions: [Transaction]
-
-		}
 		type Product {
 			id: string
 			name: string
@@ -37,14 +32,22 @@ func CreateSchema() {
 			id: string
 			buyer_id: string
 			ip: string
-			device string
+			device: string
 			products: [Product]
+		}
+		type Buyer {
+			id: string
+			name: string
+			age: int
+			transactions: [Transaction]
 		}
 	`
 
 	ctx := context.Background()
-	if err := db.DgraphClient.Alter(ctx, op); err != nil {
+	if err := c.Alter(ctx, op); err != nil {
 		log.Fatal(err)
 	}
+
+	fmt.Println("Creado schema")
 
 }
